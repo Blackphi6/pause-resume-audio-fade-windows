@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PauseResumeAudioFade</AssemblyName>
+    <Version>1.0.0</Version>
+    <RootNamespace>PauseResumeAudioFade.App</RootNamespace>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <!-- WasapiLoopbackCapture/WasapiOutは新APIへの移行推奨の警告が出るが、現状の用途では問題ないので抑制 -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PauseResumeAudioFade.Core\PauseResumeAudioFade.Core.csproj" />
+  </ItemGroup>
+
+</Project>

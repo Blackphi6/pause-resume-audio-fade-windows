@@ -1,0 +1,15 @@
+# build output
+bin/
+obj/
+dist/
+release/
+*.user
+.vs/
+
+# local diagnostics / recordings
+*.f32
+*.wav
+tests/e2e/browser-session-dump/
+tests/e2e/*.png
+*.bak*
+.claude/
