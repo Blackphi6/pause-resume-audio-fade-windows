@@ -21,6 +21,7 @@ internal sealed class TrayApp : ApplicationContext
     private readonly ToolStripMenuItem _presetMenu = new("プリセット(遅延 / フェードアウト長)");
     private readonly ToolStripMenuItem _fadeInMenu = new("フェードイン長");
     private readonly ToolStripMenuItem _deviceMenu = new("出力デバイス");
+    private readonly ToolStripMenuItem _autoSwitchItem = new("新しく接続したヘッドホン等へ自動で切り替える") { CheckOnClick = false };
     private readonly ToolStripMenuItem _autostartItem = new("Windows起動時に自動起動") { CheckOnClick = false };
     private readonly System.Windows.Forms.Timer _uiTimer = new() { Interval = 1000 };
     private readonly SynchronizationContext _ui;
@@ -109,6 +110,7 @@ internal sealed class TrayApp : ApplicationContext
         }
 
         _autostartItem.Click += (_, _) => SetAutostart(!IsAutostart());
+        _autoSwitchItem.Click += (_, _) => { _settings.AutoSwitchToNewDevice = !_settings.AutoSwitchToNewDevice; SaveAndApply(); };
 
         var openSettings = new ToolStripMenuItem("設定ファイルを開く");
         openSettings.Click += (_, _) => { _settings.Save(); OpenPath(AppPaths.SettingsFile); };
@@ -124,7 +126,7 @@ internal sealed class TrayApp : ApplicationContext
         menu.Items.AddRange(new ToolStripItem[]
         {
             _statusItem, new ToolStripSeparator(),
-            _enabledItem, _fadeOutItem, _presetMenu, _fadeInMenu, _deviceMenu, new ToolStripSeparator(),
+            _enabledItem, _fadeOutItem, _presetMenu, _fadeInMenu, _deviceMenu, _autoSwitchItem, new ToolStripSeparator(),
             retry, _autostartItem, new ToolStripSeparator(),
             openSettings, openLog, cableHelp, new ToolStripSeparator(),
             exit,
@@ -140,6 +142,7 @@ internal sealed class TrayApp : ApplicationContext
         _enabledItem.Checked = _settings.Enabled;
         _fadeOutItem.Checked = _settings.FadeOutEnabled;
         _autostartItem.Checked = IsAutostart();
+        _autoSwitchItem.Checked = _settings.AutoSwitchToNewDevice;
         foreach (ToolStripMenuItem i in _presetMenu.DropDownItems) i.Checked = (Preset)i.Tag! == _settings.Preset;
         foreach (ToolStripMenuItem i in _fadeInMenu.DropDownItems) i.Checked = (int)i.Tag! == _settings.FadeInMs;
 

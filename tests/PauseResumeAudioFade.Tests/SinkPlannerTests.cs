@@ -69,6 +69,23 @@ public class SinkPlannerTests
         Assert.Equal("hp", p.Real!.Id);
     }
 
+    [Theory]
+    [InlineData("ヘッドホン (Senary Audio)", true)]
+    [InlineData("Headphones (Realtek(R) Audio)", true)]
+    [InlineData("ヘッドホン (WH-1000XM5 Stereo)", true)]
+    [InlineData("ヘッドセット イヤホン (WH-1000XM5 Hands-Free)", false)]  // 通話用の低音質プロファイルには切り替えない
+    [InlineData("USB Audio DAC", true)]
+    [InlineData("スピーカー (Senary Audio)", false)]
+    [InlineData("Speakers (Realtek(R) Audio)", false)]
+    [InlineData("Digital Audio (HDMI) (High Definition Audio Device)", false)]
+    [InlineData("DELL U2720Q (NVIDIA High Definition Audio)", false)]
+    [InlineData("CABLE Input (VB-Audio Virtual Cable)", false)]
+    [InlineData("Steam Streaming Speakers", false)]
+    public void AutoSwitch_applies_only_to_newly_connected_listening_devices(string name, bool expected)
+    {
+        Assert.Equal(expected, SinkPlanner.IsAutoSwitchCandidate(name));
+    }
+
     [Fact]
     public void Our_own_previous_sink_is_not_treated_as_busy_after_restart()
     {

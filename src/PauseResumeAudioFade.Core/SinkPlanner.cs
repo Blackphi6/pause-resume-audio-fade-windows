@@ -43,6 +43,18 @@ public static class SinkPlanner
         @"vb-audio|virtual cable|\bcable[ -]?(in|out|a|b|c|d)\b|voicemeeter",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+    private static readonly Regex SpeakerLike = new(
+        @"speaker|スピーカー|内蔵|internal|laptop|hands-?free|ハンズフリー",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+    /// <summary>
+    /// 新しく有効になったデバイスへ自動で切り替えてよいか。ヘッドホン・USB DAC・Bluetooth等が対象。
+    /// モニター出力(スリープ復帰のたびに出入りする)、スピーカー(ヘッドホンを抜いたときのフォールバック先)、
+    /// 仮想ケーブルは対象外。
+    /// </summary>
+    public static bool IsAutoSwitchCandidate(string name) =>
+        !VirtualLike.IsMatch(name) && !Denied.IsMatch(name) && !MonitorLike.IsMatch(name) && !SpeakerLike.IsMatch(name);
+
     public static bool IsVirtualCable(EndpointInfo e, string virtualName) =>
         !string.IsNullOrWhiteSpace(virtualName) && e.Name.Contains(virtualName, StringComparison.OrdinalIgnoreCase);
 

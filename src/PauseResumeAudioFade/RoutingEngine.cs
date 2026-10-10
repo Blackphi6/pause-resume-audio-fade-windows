@@ -117,6 +117,7 @@ internal sealed class RoutingEngine : IDisposable
     private bool _wantRunning;
     private volatile bool _restartRequested;
     private string? _pendingDefaultId;
+    private string? _freshDeviceId;   // 新しく有効になったデバイス(自動切替の候補)
     private string? _preferredRealId;
     private bool _dumpsOpenedOnce;
     private bool _sinkIsVirtual = true;
@@ -646,6 +647,21 @@ internal sealed class RoutingEngine : IDisposable
                     }
                 }
 
+                // ヘッドホン等が新しく接続された → 自動でそちらから鳴らす(Windowsが既定を切り替えない機器でも追従できる)
+                var fresh = _freshDeviceId;
+                _freshDeviceId = null;
+                if (fresh != null && _settings.AutoSwitchToNewDevice && fresh != _sink.ID && fresh != _real?.ID)
+                {
+                    var dev = Devices.ById(_enum, fresh);
+                    if (dev != null && dev.DataFlow == DataFlow.Render && SinkPlanner.IsAutoSwitchCandidate(dev.FriendlyName))
+                    {
+                        Log.Info($"new output device connected; switching to it: {dev.FriendlyName}");
+                        _preferredRealId = dev.ID;
+                        SwitchReal(dev);
+                        return;
+                    }
+                }
+
                 if (_restartRequested)
                 {
                     StopCore(restoreDefault: true);
@@ -754,6 +770,7 @@ internal sealed class RoutingEngine : IDisposable
     private void OnDeviceStateChanged(string deviceId, DeviceState newState)
     {
         Log.Info($"device state changed: {deviceId} -> {newState}");
+        if (newState == DeviceState.Active) _freshDeviceId = deviceId;
         KickReconcile(500);
     }
 

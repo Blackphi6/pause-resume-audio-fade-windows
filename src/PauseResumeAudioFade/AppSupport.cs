@@ -70,6 +70,9 @@ internal sealed class Settings
     /// <summary>仮想ケーブルが無いとき、使っていない別の出力デバイスを自動で借りる。</summary>
     public bool AutoSink { get; set; } = true;
 
+    /// <summary>ヘッドホン等が新しく接続(有効化)されたら、自動でそちらから鳴らす。モニター出力・スピーカー・仮想ケーブルは対象外。</summary>
+    public bool AutoSwitchToNewDevice { get; set; } = true;
+
     /// <summary>初回の案内画面を表示済みか。</summary>
     public bool SetupShown { get; set; } = false;
 
