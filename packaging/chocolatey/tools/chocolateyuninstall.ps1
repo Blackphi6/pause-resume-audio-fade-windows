@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Continue'
+﻿$ErrorActionPreference = 'Continue'
 
 $toolsDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $exe      = Join-Path $toolsDir 'PauseResumeAudioFade.exe'

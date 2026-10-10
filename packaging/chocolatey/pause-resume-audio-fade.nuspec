@@ -6,9 +6,10 @@
     <title>Pause Resume Audio Fade</title>
     <authors>Blackphi6</authors>
     <owners>Blackphi6</owners>
-    <iconUrl>https://raw.githubusercontent.com/Blackphi6/pause-resume-audio-fade-windows/v1.0.3/assets/icon-256.png</iconUrl>
+    <iconUrl>https://cdn.jsdelivr.net/gh/Blackphi6/pause-resume-audio-fade-windows@v1.0.3/assets/icon-256.png</iconUrl>
     <projectUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows</projectUrl>
-    <projectSourceUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows</projectSourceUrl>
+    <projectSourceUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/tree/main/src</projectSourceUrl>
+    <packageSourceUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/tree/main/packaging/chocolatey</packageSourceUrl>
     <docsUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/blob/main/README.md</docsUrl>
     <bugTrackerUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/issues</bugTrackerUrl>
     <licenseUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/blob/main/LICENSE</licenseUrl>
@@ -21,13 +22,13 @@ Pause Resume Audio Fade for Windows fades the sound of **any application** when 
 
 It delays the audio by a short lookahead and applies the fade-out retroactively, then plays it on your real output.
 
-## Requirements
+**Requirements**
 - An unused output device to route the original sound to: the free virtual cable [VB-CABLE](https://vb-audio.com/Cable/)
   **or** a spare output device (a second output such as speakers + headphones, or an HDMI monitor).
   A first-run guide in the app explains this and detects it automatically once available.
 - No .NET installation needed (self-contained).
 
-## Notes
+**Notes**
 - The app runs in the system tray (right-click the icon for settings, auto-start and exit).
 - It does not access the internet and does not record or store audio.
 - The executable is not code-signed, so Windows SmartScreen may warn on first launch ("More info" > "Run anyway").
