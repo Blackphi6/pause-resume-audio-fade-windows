@@ -168,6 +168,62 @@ public class LookaheadProcessorTests
         Assert.True(PeakIn(o, 1.1, 1.12) > Amp * 0.9);
     }
 
+    [Theory]
+    [InlineData(100, 0.020)]
+    [InlineData(350, 0.020)]
+    [InlineData(350, 0.035)]
+    public void MicroGap_FadeInIsSmooth_WithoutJumps(int lookaheadMs, double gapSec)
+    {
+        // 実機E2Eで、約20msの瞬断の再開時だけ段差(自然な波形の2.8倍)が出た。処理ロジック側の問題か切り分ける再現テスト
+        var p = new LookaheadProcessor(Rate, Ch, FadeParameters.ForLookahead(lookaheadMs));
+        var gaps = new List<GapInfo>();
+        p.GapDetected += g => gaps.Add(g);
+        double gapStart = PeakCutSec + 2.0;
+        var o = Run(p, MakeInput((gapStart, true), (gapSec, false), (3.0, true)));
+        Assert.Single(gaps);
+        Assert.Equal(GapKind.Micro, gaps[0].Kind);
+
+        double onsetOut = OutTime(gapStart + gapSec, lookaheadMs);
+        double worst = MaxStep(o, onsetOut - 0.02, onsetOut + 0.5);
+        Assert.True(worst <= NaturalMaxStep * 1.3, $"step after micro gap = {worst:F4} (natural {NaturalMaxStep:F4})");
+    }
+
+    [Theory]
+    [InlineData(100)]
+    [InlineData(350)]
+    public void TinyNoiseBlipInsideSilence_DoesNotStartFadeInEarly(int lookaheadMs)
+    {
+        // VB-CABLE 実機E2Eで見つかった不具合の再現: 無音の途中に、振幅1.2e-4(16bitで約4LSB)の雑音が17サンプルだけ混ざる。
+        // これを「再開」と誤認すると、本物の音が戻る前にフェードインが進み、再開の瞬間に自然な波形の約3倍の段差が出た。
+        int cutFrame = (int)((PeakCutSec + 2.0) * Rate);
+        int gapFrames = (int)(0.030 * Rate);
+        int total = cutFrame + gapFrames + 3 * Rate;
+        var input = new float[total * Ch];
+        for (int i = 0; i < total; i++)
+        {
+            double v;
+            if (i < cutFrame) v = Amp * Math.Sin(2 * Math.PI * 440.0 * i / Rate);
+            else if (i < cutFrame + gapFrames)
+            {
+                int k = i - cutFrame;
+                v = (k >= 480 && k < 497) ? 1.2e-4 : 0.0; // 無音の途中の雑音
+            }
+            else v = Amp * Math.Sin(2 * Math.PI * 440.0 * i / Rate);
+            for (int c = 0; c < Ch; c++) input[i * Ch + c] = (float)v;
+        }
+
+        var p = new LookaheadProcessor(Rate, Ch, FadeParameters.ForLookahead(lookaheadMs));
+        var gaps = new List<GapInfo>();
+        p.GapDetected += g => gaps.Add(g);
+        var o = Run(p, input);
+
+        Assert.Single(gaps);
+        Assert.True(gaps[0].LengthMs >= 29, $"gap was cut short by the noise blip: {gaps[0].LengthMs:F1}ms");
+        double onsetOut = OutTime((cutFrame + gapFrames) / (double)Rate, lookaheadMs);
+        double worst = MaxStep(o, onsetOut - 0.02, onsetOut + 0.5);
+        Assert.True(worst <= NaturalMaxStep * 1.3, $"step after gap = {worst:F4} (natural {NaturalMaxStep:F4})");
+    }
+
     [Fact]
     public void MicroGapAfterOsTail_IsStillSmoothed()
     {

@@ -37,6 +37,12 @@ public static class SinkPlanner
         @"hdmi|displayport|display|デジタル|digital|nvidia high|amd high",
         RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
+    // 仮想ケーブル系のデバイス(VB-CABLEは「CABLE Input」のほかに「CABLE In 16ch」なども作る)。
+    // 指定した名前に一致しなくても、実際に鳴らす先や「借りる出力」には決して選ばない
+    private static readonly Regex VirtualLike = new(
+        @"vb-audio|virtual cable|\bcable[ -]?(in|out|a|b|c|d)\b|voicemeeter",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
     public static bool IsVirtualCable(EndpointInfo e, string virtualName) =>
         !string.IsNullOrWhiteSpace(virtualName) && e.Name.Contains(virtualName, StringComparison.OrdinalIgnoreCase);
 
@@ -49,7 +55,7 @@ public static class SinkPlanner
         bool allowSpare)
     {
         var cable = endpoints.FirstOrDefault(e => IsVirtualCable(e, virtualName));
-        var candidates = endpoints.Where(e => !IsVirtualCable(e, virtualName)).ToList();
+        var candidates = endpoints.Where(e => !IsVirtualCable(e, virtualName) && !VirtualLike.IsMatch(e.Name)).ToList();
 
         // 実際に鳴らす先: 前回使っていたもの → 設定で指定したもの → いまの既定 → 最初の1台
         var real =

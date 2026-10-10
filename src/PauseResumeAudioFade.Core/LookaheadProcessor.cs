@@ -109,14 +109,17 @@ public sealed class LookaheadProcessor
             int frames = samples.Length / _ch;
             long minSil = Math.Max(1, Frames(p.MinSilenceMs));
             float thr = p.SilenceThreshold;
+            float resumeThr = Math.Max(thr, p.ResumeThreshold);
 
             for (int f = 0; f < frames; f++)
             {
                 int si = f * _ch;
+                // 無音と確定した後は、より大きい振幅を超えるまで無音が続いているとみなす(微小な雑音での誤認を防ぐ)
+                float limit = _silenceStart >= 0 && _fadeOutCommitted ? resumeThr : thr;
                 bool silent = true;
                 for (int c = 0; c < _ch; c++)
                 {
-                    if (Math.Abs(samples[si + c]) > thr) { silent = false; break; }
+                    if (Math.Abs(samples[si + c]) > limit) { silent = false; break; }
                 }
 
                 long idx = _write;

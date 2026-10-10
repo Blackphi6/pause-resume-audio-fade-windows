@@ -30,6 +30,13 @@ public sealed record FadeParameters
     /// <summary>この振幅以下のサンプルを無音とみなす(厳密なデジタルゼロに近い値)。</summary>
     public float SilenceThreshold { get; init; } = 1e-4f;
 
+    /// <summary>
+    /// 無音と確定したあと、「音が戻った」とみなす振幅。SilenceThreshold より大きくする(ヒステリシス)。
+    /// 仮想ケーブル等の変換で、無音の途中に1e-4前後の微小な雑音が数サンプル混ざることがあり、これを「再開」と誤認すると、
+    /// 本物の音が戻る前にフェードインが進んでしまい、再開の瞬間に段差が出る。約−60dBなら、可聴な再開を取りこぼさない。
+    /// </summary>
+    public float ResumeThreshold { get; init; } = 1e-3f;
+
     /// <summary>falseならフェードアウトを行わない(フェードインのみ)。</summary>
     public bool FadeOutEnabled { get; init; } = true;
 

@@ -22,6 +22,27 @@ public class SinkPlannerTests
     }
 
     [Fact]
+    public void Other_virtual_cable_devices_are_never_real_output_or_spare()
+    {
+        // VB-CABLE は「CABLE Input」のほかに「CABLE In 16ch」も作る。実機で見つかった並びを再現
+        var eps = new[]
+        {
+            E("c16", "CABLE In 16ch (VB-Audio Virtual Cable)"),
+            E("spk", "スピーカー (Senary Audio)"),
+            E("cable", "CABLE Input (VB-Audio Virtual Cable)", def: true),
+        };
+        var p = Plan(eps);
+        Assert.Equal("cable", p.Sink!.Id);
+        Assert.Equal("spk", p.Real!.Id);
+
+        // ケーブルが「CABLE Input」と一致しない名前でも、鳴らす先には選ばれない
+        var q = SinkPlanner.Plan(eps, "no-such-name", null, null, null, allowSpare: true);
+        Assert.Equal("spk", q.Real!.Id);
+        Assert.NotEqual("c16", q.Sink?.Id);
+        Assert.Equal(PlanFailure.NoSink, q.Failure);
+    }
+
+    [Fact]
     public void Cable_is_never_chosen_as_real_output()
     {
         // 既定がケーブルになっていても(前回異常終了など)、実出力にはケーブル以外を選ぶ
