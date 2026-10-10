@@ -116,3 +116,10 @@ dotnet publish src/PauseResumeAudioFade -c Release -r win-x64 --self-contained t
 
 - ブラウザ拡張版: [Blackphi6/pause-resume-audio-fade](https://github.com/Blackphi6/pause-resume-audio-fade)
 - Mac版: [Blackphi6/pause-resume-audio-fade-mac](https://github.com/Blackphi6/pause-resume-audio-fade-mac)
+
+## ライセンス
+
+[MIT License](LICENSE)。
+
+使用しているライブラリ: [NAudio](https://github.com/naudio/NAudio)(MIT License)。
+VB-CABLE は VB-Audio Software の別ソフトで、このリポジトリや配布exeには含まれていません。
