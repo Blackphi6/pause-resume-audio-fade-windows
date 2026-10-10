@@ -13,3 +13,4 @@ tests/e2e/browser-session-dump/
 tests/e2e/*.png
 *.bak*
 .claude/
+*.nupkg
