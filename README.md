@@ -123,3 +123,10 @@ dotnet publish src/PauseResumeAudioFade -c Release -r win-x64 --self-contained t
 
 使用しているライブラリ: [NAudio](https://github.com/naudio/NAudio)(MIT License)。
 VB-CABLE は VB-Audio Software の別ソフトで、このリポジトリや配布exeには含まれていません。
+
+## プライバシー
+
+- このアプリは**インターネットに一切接続しません**。利用データの収集・送信もありません(導入案内の「公式サイトを開く」ボタンを押したときだけ、ブラウザで VB-Audio の公式ページが開きます)。
+- 音声は、PC内のメモリ上で遅延・加工してそのまま再生するだけで、**録音や保存はしません**(開発用の --dump オプションを自分で付けたときだけ、指定フォルダに記録します)。
+- 設定とログは %APPDATA%\PauseResumeAudioFade\ に保存され、外部には送られません。ログには再生デバイス名と、一時停止・再開を検出した時刻が残ります。不要なら、このフォルダを削除してください。
+- 自動起動をオンにすると、現在のユーザーの Run レジストリ(HKCU\Software\Microsoft\Windows\CurrentVersion\Run)に登録します。オフにすると削除します。
