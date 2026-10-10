@@ -1,5 +1,7 @@
 # Pause Resume Audio Fade for Windows
 
+<img src="assets/icon-128.png" alt="Pause Resume Audio Fade" width="96" align="right">
+
 動画や音楽の**一時停止・再開・シーク**のたびに、音を自動でフェードさせる常駐アプリです。
 ブラウザ拡張版・Mac版のWindows移植で、アプリごとの設定は不要。PCから鳴る音全体に効きます。
 
@@ -110,12 +112,13 @@ dotnet publish src/PauseResumeAudioFade -c Release -r win-x64 --self-contained t
 - `src/PauseResumeAudioFade` — トレイアプリ、案内画面、ルーティングと自己修復(`RoutingEngine`)、既定デバイス切替(IPolicyConfig)、見張り
 - `tests/` — 単体テストとE2E
 - `poc/` — 検証用の試作と診断ツール(`AudioTool` など)
+- `assets/`、`tools/make-icon.ps1` — アイコン(Mac版と共通のデザイン)と、そのICO生成スクリプト
 - `docs/` — 調査メモ
 
 ## 関連プロジェクト
 
 - ブラウザ拡張版: [Blackphi6/pause-resume-audio-fade](https://github.com/Blackphi6/pause-resume-audio-fade)
-- Mac版: [Blackphi6/pause-resume-audio-fade-mac](https://github.com/Blackphi6/pause-resume-audio-fade-mac)
+- Mac版: [Blackphi6/pause-resume-audio-fade-mac](https://github.com/Blackphi6/pause-resume-audio-fade-mac)(アイコンのデザインは共通です)
 
 ## ライセンス
 

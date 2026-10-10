@@ -2,10 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>pause-resume-audio-fade</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <title>Pause Resume Audio Fade</title>
     <authors>Blackphi6</authors>
     <owners>Blackphi6</owners>
+    <iconUrl>https://raw.githubusercontent.com/Blackphi6/pause-resume-audio-fade-windows/v1.0.3/assets/icon-256.png</iconUrl>
     <projectUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows</projectUrl>
     <projectSourceUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows</projectSourceUrl>
     <docsUrl>https://github.com/Blackphi6/pause-resume-audio-fade-windows/blob/main/README.md</docsUrl>
@@ -32,7 +33,7 @@ It delays the audio by a short lookahead and applies the fade-out retroactively,
 - The executable is not code-signed, so Windows SmartScreen may warn on first launch ("More info" > "Run anyway").
 - Start it from the Start menu ("Pause Resume Audio Fade") or run `PauseResumeAudioFade`.
     ]]></description>
-    <releaseNotes>https://github.com/Blackphi6/pause-resume-audio-fade-windows/releases/tag/v1.0.2</releaseNotes>
+    <releaseNotes>https://github.com/Blackphi6/pause-resume-audio-fade-windows/releases/tag/v1.0.3</releaseNotes>
     <copyright>Copyright (c) 2026 Blackphi6</copyright>
   </metadata>
   <files>

@@ -11,8 +11,8 @@ if (Test-Path $exe) {
 $packageArgs = @{
     packageName    = $env:ChocolateyPackageName
     fileFullPath   = $exe
-    url64bit       = 'https://github.com/Blackphi6/pause-resume-audio-fade-windows/releases/download/v1.0.2/PauseResumeAudioFade.exe'
-    checksum64     = '1c2488e9d3636231ca2d0d3d295b0a1283e5614acbde50b2900097898046df50'
+    url64bit       = 'https://github.com/Blackphi6/pause-resume-audio-fade-windows/releases/download/v1.0.3/PauseResumeAudioFade.exe'
+    checksum64     = 'ca99e92df55a71058717cb8ba28580f7dfd0d52f563c1eee5a056dac7cb21e32'
     checksumType64 = 'sha256'
 }
 Get-ChocolateyWebFile @packageArgs

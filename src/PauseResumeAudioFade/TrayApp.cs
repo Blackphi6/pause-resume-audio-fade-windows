@@ -1,6 +1,4 @@
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
 
@@ -208,34 +206,10 @@ internal sealed class TrayApp : ApplicationContext
     {
         if (_tray == null || _lastIconStatus == _engine.Status) return;
         _lastIconStatus = _engine.Status;
-        var color = _engine.Status switch
-        {
-            EngineStatus.Running => Color.FromArgb(46, 160, 67),
-            EngineStatus.SinkMissing => Color.FromArgb(219, 148, 0),
-            EngineStatus.Error => Color.FromArgb(200, 50, 50),
-            _ => Color.FromArgb(120, 120, 120),
-        };
-        using var bmp = new Bitmap(32, 32);
-        using (var g = Graphics.FromImage(bmp))
-        {
-            g.SmoothingMode = SmoothingMode.AntiAlias;
-            using var bg = new SolidBrush(color);
-            g.FillEllipse(bg, 1, 1, 30, 30);
-            using var pen = new Pen(Color.White, 3f) { StartCap = LineCap.Round, EndCap = LineCap.Round };
-            // 音量が山なりに立ち上がる(フェード)イメージのバー
-            int[] heights = { 6, 12, 18, 12, 6 };
-            for (int i = 0; i < heights.Length; i++)
-            {
-                int x = 7 + i * 4;
-                g.DrawLine(pen, x, 16 - heights[i] / 2, x, 16 + heights[i] / 2);
-            }
-        }
-        IntPtr h = bmp.GetHicon();
-        try { _tray.Icon = (Icon)Icon.FromHandle(h).Clone(); }
-        finally { DestroyIcon(h); }
+        var old = _tray.Icon;
+        _tray.Icon = AppIcon.ForStatus(_engine.Status);
+        old?.Dispose();
     }
-
-    [DllImport("user32.dll")] private static extern bool DestroyIcon(IntPtr handle);
 
     // ---------------------------------------------------------------- 補助
 

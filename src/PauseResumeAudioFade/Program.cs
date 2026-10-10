@@ -9,6 +9,7 @@ internal static class Program
     //   --watchdog <pid>   親(pid)の終了を待ち、既定デバイス/ミュートが元に戻っていなければ復旧する(自動で起動される)
     //   --restore          前回の異常終了の後始末(既定デバイス/ミュートを元に戻す)だけ行って終了
     //   --quit             起動中のインスタンスに正常終了を要求(既定デバイスを元に戻して終了)
+    //   --export-icons <dir>  状態ごとのトレイアイコンをPNGで書き出して終了(開発用)
     // 開発/テスト用オプション(settings.jsonには保存されない限り一時的):
     //   --sink <名前>      切替先デバイスの名前(部分一致)。仮想ケーブルの代わりに別の出力デバイスを使う
     //   --real <名前>      実際に鳴らす出力デバイスの名前(部分一致)
@@ -24,6 +25,16 @@ internal static class Program
         if (wi >= 0 && wi + 1 < args.Length && int.TryParse(args[wi + 1], out int pid))
         {
             RoutingState.RunWatchdog(pid);
+            return 0;
+        }
+
+        // 開発用: 状態ごとのトレイアイコンをPNGで書き出す(見た目の確認用)
+        int ei = Array.IndexOf(args, "--export-icons");
+        if (ei >= 0 && ei + 1 < args.Length)
+        {
+            Directory.CreateDirectory(args[ei + 1]);
+            foreach (EngineStatus st in Enum.GetValues<EngineStatus>())
+                using (var ic = AppIcon.ForStatus(st, 64)) ic.ToBitmap().Save(Path.Combine(args[ei + 1], $"tray-{st}.png"));
             return 0;
         }
 

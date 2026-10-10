@@ -25,6 +25,7 @@ internal sealed class SetupForm : Form
     {
         _engine = engine;
         Text = "Pause Resume Audio Fade";
+        Icon = AppIcon.Window;
         Font = new Font("Yu Gothic UI", 10f);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
