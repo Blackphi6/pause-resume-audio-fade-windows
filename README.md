@@ -2,6 +2,8 @@
 
 <img src="assets/icon-128.png" alt="Pause Resume Audio Fade" width="96" align="right">
 
+公式サイト（聞き比べのデモ付き）: https://blackphi6.github.io/pause-resume-audio-fade/
+
 動画や音楽の**一時停止・再開・シーク**のたびに、音を自動でフェードさせる常駐アプリです。
 ブラウザ拡張版・Mac版のWindows移植で、アプリごとの設定は不要。PCから鳴る音全体に効きます。
 
